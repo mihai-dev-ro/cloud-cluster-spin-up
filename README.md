@@ -1,5 +1,7 @@
 # Spin up a Scaleway cluster
 
+Inspired by https://github.com/jeremiegoldberg/dcos-scaleway
+
 Automate the provisioning of a cluster with the following configuration
 
 - 1 __master__ machine (or 3 machines with zookeeper configured for leader election) with 2vCPUs, 2GB RAM, 20GB Disk space
@@ -7,6 +9,8 @@ Automate the provisioning of a cluster with the following configuration
 
 Total computing power is: 9 vCPUs, 12GB RAM
 Total disk for HDFS: 120 GB
+
+I want to use Mesos to manage the resources of the cluster
 
 ## Cluster Frameworks
 
