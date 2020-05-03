@@ -1,6 +1,6 @@
 # Spin up a Scaleway cluster
 
-Inspired by https://github.com/jeremiegoldberg/dcos-scaleway
+Based on the project https://github.com/jeremiegoldberg/dcos-scaleway
 
 Automate the provisioning of a cluster with the following configuration
 
