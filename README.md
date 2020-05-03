@@ -8,10 +8,12 @@ Automate the provisioning of a cluster with the following configuration
 Total computing power is: 9 vCPUs, 12GB RAM
 Total disk for HDFS: 120 GB
 
+## Cluster Frameworks
+
 Once the resource are provisioned, the following middleware/frameworks should be installed :
 
-- HDFS for the distributed storage of humonguous files
-- Spark for distributed batch and stream processing
-- Kafka for distributed streaming platform
-- Cassandra for distributed NoSQL database
+- [HDFS](https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html) for the distributed storage of humonguous files
+- [Spark](https://spark.apache.org) for distributed batch and stream processing
+- [Kafka](https://kafka.apache.org) for distributed streaming 
+- [Cassandra](https://cassandra.apache.org) for distributed NoSQL database
 
