@@ -10,6 +10,14 @@ resource "scaleway_instance_server" "agent_private" {
   security_group_id = var.security_group
   enable_dynamic_ip = true
 
+
+  connection {
+    host = self.public_ip
+    type = "ssh"
+    user = "root"
+    private_key = file("~/.ssh/id_rsa")
+  }
+
   provisioner "remote-exec" {
     inline = [
       # uninstall old versions
@@ -25,21 +33,25 @@ resource "scaleway_instance_server" "agent_private" {
       # install docker
       "yum install -y yum-utils device-mapper-persistent-data lvm2",
       "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo",
-      "yum install docker",
+      "yum install -y docker",
       "systemctl start docker",
       "systemctl enable docker",
 
       # network time protocol (to sync the times on all machines)
-      "chkconfig ntpd on",
-      "ntpdate -s ntp.ubuntu.com",
+      "systemctl stop chronyd",
+      "systemctl disable chronyd",
+      "yum install -y ntp ntpdate",
+      "systemctl start ntpd",
+      "systemctl enable ntpd",
+      "ntpdate -u -s ntp.ubuntu.com",
 
       # should I install HDFS name node?
     ]
   }
 
   provisioner "file" {
-    source = "daemon.json"
-    destination = "/etc/docker/daemon.json"
+    content       = file("${path.module}/daemon.json")
+    destination   = "/etc/docker/daemon.json"
   }
 }
 
@@ -49,7 +61,7 @@ resource "scaleway_instance_security_group_rules" "security-rule" {
   inbound_rule {
     action = "accept"
     protocol = "TCP"
-    ip_range = scaleway_instance_server.agent_private.private_ip
+    ip = scaleway_instance_server.agent_private.private_ip
   }
 }
 

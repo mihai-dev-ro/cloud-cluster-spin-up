@@ -21,6 +21,12 @@ resource "scaleway_instance_server" "bootstrap_node" {
   security_group_id = scaleway_instance_security_group.dcos_cluster_private.id
   enable_dynamic_ip = true
 
+  connection {
+    host = self.public_ip
+    type = "ssh"
+    private_key = file("~/.ssh/id_rsa")
+  }
+
   provisioner "remote-exec" {
     inline     = [
         "mkdir /tmp/genconf"
@@ -58,7 +64,10 @@ resource "scaleway_instance_server" "bootstrap_node" {
       # install docker
       "yum install -y yum-utils",
       "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo",
-      "yum install docker",
+      "yum install -y docker",
+
+      # install wget
+      "yum install -y wget",
 
       "[ ! -f /tmp/dcos_generate_config.sh ] && wget -O /tmp/dcos_generate_config.sh https://downloads.dcos.io/dcos/stable/dcos_generate_config.sh",
       "bash /tmp/config.sh ${module.dcos_cluster.private_agents_ip} ${module.dcos_cluster.masters_ip} ${module.dcos_cluster.public_agents_ip} > /tmp/genconf/config.yaml",
@@ -74,7 +83,7 @@ resource "scaleway_instance_security_group_rules" "security-rule" {
 
   inbound_rule {
     action = "accept"
-    ip_range = scaleway_instance_server.bootstrap_node.private_ip
+    ip = scaleway_instance_server.bootstrap_node.private_ip
     protocol = "TCP"
   }
 }

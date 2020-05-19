@@ -2,6 +2,18 @@ resource "scaleway_instance_security_group" "dcos_cluster_private" {
   name = "dcos-cluster-private-agents"
   description = "Private Network Access policies around DC/OS Cluster"
   inbound_default_policy = "drop"
+  external_rules = true
+}
+
+resource "scaleway_instance_security_group_rules" "dcos_cluster_private_ssh" {
+  security_group_id = scaleway_instance_security_group.dcos_cluster_private.id
+
+  inbound_rule {
+    action = "accept"
+    ip_range = "0.0.0.0/0"
+    protocol = "TCP"
+    port = "22"
+  }  
 }
 
 resource "scaleway_instance_security_group_rules" "dcos_cluster_private_inbound_home" {
@@ -14,7 +26,7 @@ resource "scaleway_instance_security_group_rules" "dcos_cluster_private_inbound_
   }  
 }
 
-resource "scaleway_instance_security_group_rules" "dcos_cluster_private_otbound_all" {
+resource "scaleway_instance_security_group_rules" "dcos_cluster_private_outbound_all" {
   security_group_id = scaleway_instance_security_group.dcos_cluster_private.id
 
   outbound_rule {
@@ -27,5 +39,15 @@ resource "scaleway_instance_security_group_rules" "dcos_cluster_private_otbound_
 resource "scaleway_instance_security_group" "dcos_cluster_public" {
   name = "dcos-cluster-public-agents"
   description = "Public Network Access policies around DC/OS Cluster"
-  inbound_default_policy = "accept"
+  external_rules = true
+}
+
+resource "scaleway_instance_security_group_rules" "dcos_cluster_public_inbound_all" {
+  security_group_id = scaleway_instance_security_group.dcos_cluster_public.id
+
+  inbound_rule {
+    action = "accept"
+    ip_range = "0.0.0.0/0"
+    protocol = "TCP"
+  }  
 }
