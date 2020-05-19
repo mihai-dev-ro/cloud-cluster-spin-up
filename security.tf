@@ -5,7 +5,7 @@ resource "scaleway_instance_security_group" "dcos_cluster_private" {
 }
 
 resource "scaleway_instance_security_group_rules" "dcos_cluster_private_inbound_home" {
-  security_group_id = "${scaleway_instance_security_group.dcos_cluster_private.id}"
+  security_group_id = scaleway_instance_security_group.dcos_cluster_private.id
 
   inbound_rule {
     action = "accept"
@@ -15,7 +15,7 @@ resource "scaleway_instance_security_group_rules" "dcos_cluster_private_inbound_
 }
 
 resource "scaleway_instance_security_group_rules" "dcos_cluster_private_otbound_all" {
-  security_group_id = "${scaleway_instance_security_group.dcos_cluster_private}"
+  security_group_id = scaleway_instance_security_group.dcos_cluster_private.id
 
   outbound_rule {
     action = "accept"
