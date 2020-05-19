@@ -1,68 +1,31 @@
-resource "scaleway_security_group" "mesosphere" {
-  name        = "dcos-slaves"
-  description = "traffic around mesosphere cluster"
+resource "scaleway_instance_security_group" "dcos_cluster_private" {
+  name = "dcos-cluster-private-agents"
+  description = "Private Network Access policies around DC/OS Cluster"
+  inbound_default_policy = "drop"
 }
 
-resource "scaleway_security_group_rule" "outbound_all" {
-  security_group = "${scaleway_security_group.mesosphere.id}"
+resource "scaleway_instance_security_group_rules" "dcos_cluster_private_inbound_home" {
+  security_group_id = "${scaleway_instance_security_group.dcos_cluster_private.id}"
 
-  action    = "accept"
-  direction = "outbound"
-  ip_range  = "0.0.0.0/0"
-  protocol  = "TCP"
+  inbound_rule {
+    action = "accept"
+    ip = "82.79.248.51"
+    protocol = "TCP"
+  }  
 }
 
-resource "scaleway_security_group_rule" "inbound_tabmo" {
-  security_group = "${scaleway_security_group.mesosphere.id}"
+resource "scaleway_instance_security_group_rules" "dcos_cluster_private_otbound_all" {
+  security_group_id = "${scaleway_instance_security_group.dcos_cluster_private}"
 
-  action    = "accept"
-  direction = "inbound"
-  ip_range  = "193.239.192.18"
-  protocol  = "TCP"
+  outbound_rule {
+    action = "accept"
+    ip_range = "0.0.0.0/0"
+    protocol = "TCP"
+  }
 }
 
-resource "scaleway_security_group_rule" "inbound_maison" {
-  security_group = "${scaleway_security_group.mesosphere.id}"
-
-  action    = "accept"
-  direction = "inbound"
-  ip_range  = "82.224.139.25"
-  protocol  = "TCP"
+resource "scaleway_instance_security_group" "dcos_cluster_public" {
+  name = "dcos-cluster-public-agents"
+  description = "Public Network Access policies around DC/OS Cluster"
+  inbound_default_policy = "accept"
 }
-
-resource "scaleway_security_group_rule" "inbound_VPN" {
-  security_group = "${scaleway_security_group.mesosphere.id}"
-
-  action    = "accept"
-  direction = "inbound"
-  ip_range  = "10.1.160.221"
-  protocol  = "TCP"
-}
-
-
-#resource "scaleway_security_group_rule" "inbound_deny" {
-#  security_group = "${scaleway_security_group.mesosphere.id}"
-#
-#  action    = "drop"
-#  direction = "inbound"
-#  ip_range  = "0.0.0.0/0"
-#  protocol  = "TCP"
-#  position  = "100"
-#}
-
-##### Public
-
-resource "scaleway_security_group" "mesosphere-public" {
-  name        = "dcos-public"
-  description = "traffic around mesosphere cluster"
-}
-
-resource "scaleway_security_group_rule" "inbound_all" {
-  security_group = "${scaleway_security_group.mesosphere-public.id}"
-
-  action    = "accept"
-  direction = "inbound"
-  ip_range  = "0.0.0.0/0"
-  protocol  = "TCP"
-}
-
