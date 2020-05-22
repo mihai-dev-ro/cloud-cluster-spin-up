@@ -1,5 +1,5 @@
 data "scaleway_instance_image" "centos" {
-  name = "CentOS 7.6"
+  name = "dcos-base-image"  # CentOS 7.6 with Docker, NTP installed
   architecture = "x86_64"
 }
 
@@ -9,6 +9,19 @@ module "dcos_cluster" {
   agent_node_server_type    = var.agent_node_server_type
   security_group            = scaleway_instance_security_group.dcos_cluster_private.id
   security_group_opendoors  = scaleway_instance_security_group.dcos_cluster_public.id  
+}
+
+resource "scaleway_instance_security_group_rules" "security-rules-cluster-nodes" {
+  security_group_id = scaleway_instance_security_group.dcos_cluster_private.id
+
+  dynamic "inbound_rule" {
+    for_each = module.dcos_cluster.all_nodes_ip
+    content {
+      action = "accept"
+      ip = inbound_rule.value
+      protocol = "TCP"
+    }
+  }
 }
 
 # 2 cores, 16GB RAM, 60GB disk
@@ -51,34 +64,23 @@ resource "scaleway_instance_server" "bootstrap_node" {
   # launch the DC/OS bootstrap sequence
   provisioner "remote-exec" {
     inline = [
-      # uninstall old versions
-      "yum remove docker",
-      "yum remove docker-client",
-      "yum remove docker-client-latest",
-      "yum remove docker-common",
-      "yum remove docker-latest",
-      "yum remove docker-latest-logrotate",
-      "yum remove docker-logrotate",
-      "yum remove docker-engine",
-
-      # install docker
-      "yum install -y yum-utils",
-      "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo",
-      "yum install -y docker",
-
       # install wget
-      "yum install -y wget",
-
-      "[ ! -f /tmp/dcos_generate_config.sh ] && wget -O /tmp/dcos_generate_config.sh https://downloads.dcos.io/dcos/stable/dcos_generate_config.sh",
+      # "yum install -y wget",
+      # "[ ! -f /tmp/dcos_generate_config.sh ] && wget -O /tmp/dcos_generate_config.sh https://downloads.dcos.io/dcos/stable/dcos_generate_config.sh",
+      
+      "cd /tmp/ && curl -O https://downloads.dcos.io/dcos/stable/1.13.1/dcos_generate_config.sh",
       "bash /tmp/config.sh ${module.dcos_cluster.private_agents_ip} ${module.dcos_cluster.masters_ip} ${module.dcos_cluster.public_agents_ip} > /tmp/genconf/config.yaml",
       "chmod 600 /tmp/genconf/ssh_key",
-      "cd /tmp/ && bash dcos_generate_config.sh --install-prereqs && bash dcos_generate_config.sh --preflight && bash dcos_generate_config.sh --deploy"
+      "cd /tmp/ && sudo bash dcos_generate_config.sh --genconf",
+      "cd /tmp/ && sudo bash dcos_generate_config.sh --install-prereqs",
+      "cd /tmp/ && sudo bash dcos_generate_config.sh --preflight",
+      "cd /tmp/ && sudo bash dcos_generate_config.sh --deploy"
     ]
   }
 }
 
 
-resource "scaleway_instance_security_group_rules" "security-rule" {
+resource "scaleway_instance_security_group_rules" "security-rules-bootstrap-node" {
   security_group_id = scaleway_instance_security_group.dcos_cluster_private.id
 
   inbound_rule {

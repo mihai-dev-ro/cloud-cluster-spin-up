@@ -9,3 +9,7 @@ output "public_agents_ip" {
 output "private_agents_ip" {
   value = "${module.dcos201.internal_ip}"#,${module.dcos202.internal_ip},${module.dcos203.internal_ip}"
 }
+
+output all_nodes_ip {
+  value = ["${module.dcos001.internal_ip}","${module.dcos101.internal_ip}","${module.dcos201.internal_ip}"]
+}

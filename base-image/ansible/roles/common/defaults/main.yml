@@ -1,0 +1,4 @@
+---
+system_updates: false
+dcos:
+  selinux_mode: permissive

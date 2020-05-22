@@ -1,0 +1,49 @@
+---
+  # This playbook installs docker
+  # based on https://github.com/dcos/dcos-ansible/blob/master/roles/dcos_requirements/tasks/main.yml
+  
+- name: Check if docker is already installed
+  yum:
+    list:
+      - docker
+      - docker-ce
+  # If not installed yum_list_docker.results[*].yumstate != installed
+  register: yum_list_docker
+
+- name: "Docker CE (stable) repository (Only non-EL systems)"
+  yum_repository:
+    name: docker-ce
+    description: Docker CE Repository
+    baseurl: "https://download.docker.com/linux/centos/7/$basearch/stable"
+    enabled: yes
+    gpgcheck: yes
+    gpgkey: https://download.docker.com/linux/centos/gpg
+  when: yum_list_docker.results | selectattr("yumstate", "match", "installed") | list | length == 0
+
+- name: "Preinstall containerd.io for docker-ce on CentOS preventing kmem bug"
+  yum:
+    name: "{{ dcos_containerd_pkg_name }}"
+    update_cache: true
+    state: present
+  when: yum_list_docker.results | selectattr("yumstate", "match", "installed") | list | length == 0
+
+- block:
+  - name: "Install required system packages"
+    yum:
+      name: "{{ dcos_prereq_packages }}"
+      state: present
+    register: dcos_yum_system_packages_install
+    until: dcos_yum_system_packages_install is success
+    retries: 3
+    delay: 60
+  rescue:
+    - name: Output
+      fail:
+        msg: >
+          ABORT! Could not install '{{ dcos_prereq_packages }}'.
+          Please make sure the systems repositories are enabled and reachable!
+  
+- name: "Ensure 'docker' group exists"
+  group:
+    name: docker
+    state: present

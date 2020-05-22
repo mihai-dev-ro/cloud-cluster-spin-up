@@ -1,0 +1,45 @@
+{
+  "variables": {
+    "organization_id": "",
+    "api_token": ""
+  },
+  "builders": [
+    {
+      "organization_id": "{{ user `organization_id` }}",
+      "api_token": "{{ user `api_token` }}",
+      "server_name": "dcos-node",
+      "image_name": "dcos-base-image",
+      "snapshot_name": "dcos-base-image-snapshot",
+      "type": "scaleway",
+      "region": "ams1",
+      "image": "05794ee5-c6d2-4d69-86dd-f1fc9032921d", 
+      "commercial_type": "DEV1-S",
+      "ssh_private_key_file": "~/.ssh/id_rsa",
+      "ssh_username": "root"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "remote_path": "/home/centos/agent-setup.sh",
+      "script": "agent-setup.sh"
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "ansible/scaleway-packer.yml",
+      "playbook_dir": "ansible",
+      "staging_directory": "/home/centos/ansible",
+      "inventory_file": "ansible/inventory/scaleway/hosts"
+    },
+    {
+        "type": "shell",
+        "execute_command": "{{ .Vars }} sudo -E /bin/sh -ex '{{ .Path }}'",
+        "inline": [
+            "sleep 5s",
+            "sudo yum remove ansible -y",
+            "sudo rm -rf /home/centos/ansible", 
+            "echo Complete..."
+        ]
+    }
+  ]
+}

@@ -1,8 +1,9 @@
 resource "scaleway_instance_security_group" "dcos_cluster_private" {
   name = "dcos-cluster-private-agents"
   description = "Private Network Access policies around DC/OS Cluster"
-  inbound_default_policy = "drop"
+  
   external_rules = true
+  #inbound_default_policy = "drop"
 }
 
 resource "scaleway_instance_security_group_rules" "dcos_cluster_private_ssh" {
