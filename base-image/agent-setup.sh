@@ -12,9 +12,8 @@ sudo python get-pip.py
 sudo rm -rf get-pip.py
 sudo pip install virtualenv
 sudo yum install -y libselinux-python
+
 # Install jq becasue it is awesome! Yay!
-# sudo wget https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 -O /usr/bin/jq
-# sudo chmod 0775 /usr/bin/jq
 sudo yum install jq -y
 
 

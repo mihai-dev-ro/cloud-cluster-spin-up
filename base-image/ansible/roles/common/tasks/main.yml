@@ -55,7 +55,7 @@
     enabled: no
   when: "'dnsmasq.service' in ansible_facts.services"
     
-- name: "ntp installed"
+- name: "Ntp installed"
   yum:
     name: ntp
     update_cache: true
@@ -65,13 +65,19 @@
   retries: 3
   delay: 60
 
+- name: Start service ntpd
+  service:
+    name: ntpd
+    state: started
+    enabled: yes
+
 - block:
   - name: Check time sync (ntp)
     shell: |
       ntpstat | grep -qv 'unsynchronised'
     register: ntp_time_sync
-    changed_when: talse
-    when: "'ntpd.service' in ansible_facts.services and dcos_timesync"
+    changed_when: false
+    when: "dcos_timesync"
 
   - name: Stop service ntpd
     service:
@@ -84,11 +90,22 @@
     when: "ntp_time_sync is defined and ntp_time_sync.rc is defined and ntp_time_sync.rc == 1"
     register: time_sync_done_ntpd
 
-  - name: Start service ntpd
+  - name: Start service ntpd after ntpsync
     service:
       name: ntpd
       state: started
     when: "ntp_time_sync is defined and ntp_time_sync.rc is defined and ntp_time_sync.rc == 1"
+
+  # - name: "Sync time with ntpd"
+  #   command: "ntpd -gq"
+  #   register: time_sync_done_ntpd
+
+  # - name: Start service ntpd
+  #   service:
+  #     name: ntpd
+  #     state: started
+  #     enabled: yes
+  #   when: "time_sync_done_ntpd"
   rescue:
     - name: Output
       fail:

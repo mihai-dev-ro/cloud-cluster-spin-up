@@ -28,21 +28,28 @@
   when: yum_list_docker.results | selectattr("yumstate", "match", "installed") | list | length == 0
 
 - block:
-  - name: "Install required system packages"
+  - name: "Docker installed"
     yum:
-      name: "{{ dcos_prereq_packages }}"
+      name: "{{ dcos_docker_pkgs }}"
+      update_cache: true
       state: present
-    register: dcos_yum_system_packages_install
-    until: dcos_yum_system_packages_install is success
+    register: dcos_yum_docker_install
+    until: dcos_yum_docker_install is success
     retries: 3
     delay: 60
   rescue:
     - name: Output
       fail:
-        msg: >
-          ABORT! Could not install '{{ dcos_prereq_packages }}'.
-          Please make sure the systems repositories are enabled and reachable!
+        msg: "ABORTING! Could not install '{{ dcos_docker_pkg_name }}'."
+      when: yum_list_docker.results | selectattr("yumstate", "match", "installed") | list | length == 0
   
+- name: "Docker running (Only on some platforms)"
+  systemd:
+    name: "{{ dcos_docker_service_name | default('docker') }}"
+    state: started
+    enabled: true
+  when: "'podman' not in (dcos_docker_service_name | default('docker'))"
+
 - name: "Ensure 'docker' group exists"
   group:
     name: docker
