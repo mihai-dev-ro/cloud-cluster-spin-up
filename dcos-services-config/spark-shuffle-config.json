@@ -1,0 +1,47 @@
+{
+  "id": "spark-shuffle-service",
+  "instances": 5,
+  "mem": 512,
+  "cpus": 0.05,
+  "portDefinitions": [
+    { "port": 7337, "protocol": "tcp", "name": "shuffle-service" }
+  ],
+  "cmd": "rm -rf /tmp/spark/spark-* && rm -rf /tmp/spark/blockmgr-* && /opt/spark/sbin/start-mesos-shuffle-service.sh --conf spark.shuffle.service.enabled=true --conf spark.network.timeout=10s --conf spark.shuffle.io.connectionTimeout=10s && cd /opt/spark/logs/ && find . -name 'spark--org.apache.spark.deploy.mesos.MesosExternalShuffleService-*.out' -exec tail -f {} \\;",
+  "env": {
+    "SPARK_DAEMON_MEMORY": "512m"
+  },
+  "constraints": [
+    [
+      "hostname",
+      "UNIQUE"
+    ]
+  ],
+  "labels": {
+    "SPARK_VERSION": "2.4.3"
+  },
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "mesosphere/spark:2.9.0-2.4.3-scala-2.12-hadoop-2.9",
+      "network": "HOST"
+    },
+    "volumes": [
+      {
+        "containerPath": "/tmp/spark",
+        "hostPath": "/var/lib/tmp/spark",
+        "mode": "RW"
+      }
+    ]
+  },
+  "healthChecks": [
+    {
+      "protocol": "TCP",
+      "gracePeriodSeconds": 5,
+      "intervalSeconds": 60,
+      "timeoutSeconds": 10,
+      "maxConsecutiveFailures": 3,
+      "port": 7337,
+      "portType": "PORT_NUMBER"
+    }
+  ]
+}

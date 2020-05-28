@@ -1,0 +1,12 @@
+{
+  "hdfs": {
+    "config-url": "http://api.hdfs.marathon.l4lb.thisdcos.directory/v1/endpoints"
+  },
+  "service": {
+    "UCR_containerizer": true,
+    "cpus": 1,
+    "docker-image": "mesosphere/spark:2.9.0-2.4.3-scala-2.12-hadoop-2.9",
+    "log-level": "DEBUG",
+    "mem": 1024
+  }
+}
