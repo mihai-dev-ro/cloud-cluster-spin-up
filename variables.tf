@@ -33,6 +33,11 @@ variable "server_type_agent" {
   default = "DEV1-L" # 4vCPUs, 8GB RAM, 80 GB SSD
 }
 
+variable "server_type_agent_public" {
+  type    = string
+  default = "DEV1-M" # 3vCPUs, 4GB RAM, 40 GB SSD
+}
+
 variable master_root_name {
   type        = string
   default     = "dcos-master-"

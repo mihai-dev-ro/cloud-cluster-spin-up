@@ -1,0 +1,136 @@
+{
+  "service": {
+    "name": "dcos-monitoring",
+    "user": "nobody",
+    "service_account": "",
+    "service_account_secret": "",
+    "log_level": "INFO",
+    "placement_constraints": [],
+    "token_interval": 600
+  },
+  "prometheus": {
+    "cpus": 1,
+    "mem": 1024,
+    "volume": {
+      "type": "ROOT",
+      "size": 2000,
+      "profile": ""
+    },
+    "prereserved_role": "",
+    "placement_constraints": "",
+    "interval": 30,
+    "timeout": 25,
+    "dcos_metrics_node_port": 61091,
+    "storage_tsdb_retention": "15d",
+    "admin_router_proxy": {
+      "enabled": true,
+      "url": ""
+    },
+    "marathon_lb_proxy": {
+      "enabled": false,
+      "vhost": ""
+    },
+    "remote_write": {
+      "url": "",
+      "remote_timeout": "30s",
+      "basic_auth": {
+        "username": "",
+        "password": ""
+      },
+      "bearer_token": "",
+      "bearer_token_file": "",
+      "tls_config": {
+        "enabled": false
+      },
+      "proxy_url": "",
+      "queue_config": {
+        "capacity": "500",
+        "max_shards": "1000",
+        "min_shards": "1",
+        "max_samples_per_send": "100",
+        "batch_send_deadline": "5s",
+        "min_backoff": "30ms",
+        "max_backoff": "100ms"
+      }
+    },
+    "remote_read": {
+      "url": "",
+      "required_matchers": "",
+      "remote_timeout": "1m",
+      "read_recent": "false",
+      "basic_auth": {
+        "username": "",
+        "password": ""
+      },
+      "bearer_token": "",
+      "bearer_token_file": "",
+      "tls_config": {
+        "enabled": false
+      },
+      "proxy_url": ""
+    },
+    "alert_rules_repository": {
+      "url": "",
+      "path": "",
+      "reference_name": "",
+      "credentials": {
+        "username_secret": "",
+        "password_secret": "",
+        "deploy_key_secret": ""
+      }
+    }
+  },
+  "pushgateway": {
+    "enabled": false
+  },
+  "grafana": {
+    "cpus": 0.5,
+    "mem": 256,
+    "data_volume": {
+      "type": "ROOT",
+      "size": 50,
+      "profile": ""
+    },
+    "ui_port": 3000,
+    "admin_router_proxy": true,
+    "admin_credentials": {
+      "username_secret": "",
+      "password_secret": ""
+    },
+    "placement_constraints": "",
+    "use_light_theme": true,
+    "default_dashboards": false,
+    "dashboard_config_repository": {
+      "url": "https://github.com/dcos/grafana-dashboards",
+      "path": "/dashboards",
+      "reference_name": "",
+      "credentials": {
+        "username_secret": "",
+        "password_secret": "",
+        "deploy_key_secret": ""
+      }
+    }
+  },
+  "alertmanager": {
+    "cpus": 0.3,
+    "mem": 512,
+    "data_volume": {
+      "type": "ROOT",
+      "size": 50,
+      "profile": ""
+    },
+    "secrets": {
+      "slack_api_url_secret": "",
+      "smtp_auth_password_secret": ""
+    },
+    "config_repository": {
+      "url": "",
+      "path": "",
+      "credentials": {
+        "username_secret": "",
+        "password_secret": "",
+        "deploy_key_secret": ""
+      }
+    }
+  }
+}

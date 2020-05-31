@@ -26,7 +26,7 @@ resource "scaleway_instance_server" "public_agent" {
   count             = var.nb_nodes_public_agent
   name              = "${var.public_agent_root_name}-${count.index}"
   image             = data.scaleway_instance_image.centos.id
-  type              = var.server_type_agent
+  type              = var.server_type_agent_public
   security_group_id = scaleway_instance_security_group.dcos_cluster_public.id
   enable_dynamic_ip = true 
 }

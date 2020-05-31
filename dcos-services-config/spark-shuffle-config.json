@@ -1,7 +1,7 @@
 {
   "id": "spark-shuffle-service",
   "instances": 5,
-  "mem": 512,
+  "mem": 1024,
   "cpus": 0.05,
   "portDefinitions": [
     { "port": 7337, "protocol": "tcp", "name": "shuffle-service" }
