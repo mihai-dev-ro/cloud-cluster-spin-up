@@ -8,7 +8,7 @@ variable nb_nodes_master {
 
 variable nb_nodes_public_agent {
   type        = number
-  default     = 0
+  default     = 1
   description = "number of public agents in the cluster"
 }
 

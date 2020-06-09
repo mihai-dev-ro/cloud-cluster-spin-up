@@ -1,0 +1,8 @@
+{
+  "auto-assign-service-ports": false,
+  "bind-http-https": false,
+  "haproxy-group": "external",
+  "instances": 1,
+  "cpus": 1,
+  "mem": 1024
+}

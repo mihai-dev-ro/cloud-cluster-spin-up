@@ -1,3 +1,8 @@
+locals {
+  # version of the DCOS cluster (already tested an working with 1.13.1)
+  dcos_version = "1.13.1" # not used. keep it for tracking the version I experimented with
+}
+
 # configure the authentication credentials for 
 # accessing the provider of the cloud resources
 provider "scaleway" {

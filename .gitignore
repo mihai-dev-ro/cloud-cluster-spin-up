@@ -31,4 +31,5 @@ override.tf.json
 .DS_Store
 provider-credentials.tf
 base-image/provider-credentials.json
+dockerhub-credentials.txt
 

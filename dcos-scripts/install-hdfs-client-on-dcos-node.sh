@@ -57,3 +57,5 @@ source ~/.bash_profile
 # add /history directory in hdfs 
 hdfs dfs -mkdir /history
 hdfs dfs -chmod 666 /history
+hdfs dfs -mkdir -p /spark-job/terasort/data
+hdfs dfs -chmod 666 /spark-job

@@ -8,17 +8,25 @@ BASE=${DIR##*/}
 DCOS_CONFIG_DIR=${DIR%$BASE}"dcos-services-config"
 
 # install spark-shuffle services
-dcos marathon app add < "$DCOS_CONFIG_DIR/spark-shuffle-config.json"
+dcos marathon app add "$DCOS_CONFIG_DIR/spark-shuffle-config.json"
+
+# wait for shuffle service to be scheduled and installed
+sleep 15s
 
 # install hdfs
-dcos package install --options="$DCOS_CONFIG_DIR/hdfs-config.json" hdfs
+dcos package install --yes --options="$DCOS_CONFIG_DIR/hdfs-config.json" hdfs
 
 # install spark
-dcos package install --options="$DCOS_CONFIG_DIR/spark-config.json" spark
+dcos package install --yes --options="$DCOS_CONFIG_DIR/spark-config.json" spark
 
 # install spark-history
-dcos package install --options="$DCOS_CONFIG_DIR/spark-history-config.json" spark-history
+dcos package install --yes --options="$DCOS_CONFIG_DIR/spark-history-config.json" spark-history
 
 # install dcos-monitoring
-dcos package install --options="$DCOS_CONFIG_DIR/dcos-monitoring-config.json" dcos-monitoring
+dcos package install --yes --options="$DCOS_CONFIG_DIR/dcos-monitoring-config.json" dcos-monitoring
 
+# install marathon load balancer
+dcos package install --yes --options="$DCOS_CONFIG_DIR/marathon-lb-config.json" marathon-lb
+
+# install spark-monitoring
+dcos marathon app add "$DCOS_CONFIG_DIR/spark-monitoring-config.json"

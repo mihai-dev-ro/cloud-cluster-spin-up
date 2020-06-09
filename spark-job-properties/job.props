@@ -1,12 +1,23 @@
-spark.mesos.containerizer   		mesos
-spark.shuffle.service.enabled		true
-spark.dynamicAllocation.enabled       	true
+spark.mesos.containerizer   		      mesos
+spark.shuffle.service.enabled		      true
+spark.dynamicAllocation.enabled       true
 spark.dynamicAllocation.minExecutors	6
 spark.dynamicAllocation.maxExecutors	10
-spark.local.dir				/tmp/spark
-spark.mesos.executor.docker.volumes	/var/lib/tmp/spark:/tmp/spark:rw
-spark.eventLog.enabled      		true
-spark.eventLog.dir          		hdfs:///history
-spark.executor.memory			1g
-spark.executor.cores			1
+spark.local.dir				                /tmp/spark
+spark.mesos.executor.docker.volumes	  /var/lib/tmp/spark:/tmp/spark:rw
+spark.eventLog.enabled      		      true
+spark.eventLog.dir          		      hdfs:///history
+spark.executor.memory			            1g
+spark.executor.cores			            1
+
+spark.metrics.conf.*.sink.graphite.class  org.apache.spark.metrics.sink.GraphiteSink
+spark.metrics.conf.*.sink.graphite.host   spark-graphite.marathon.l4lb.thisdcos.directory
+spark.metrics.conf.*.sink.graphite.port   2003
+spark.metrics.conf.*.sink.graphite.period 10
+spark.metrics.conf.*.sink.graphite.unit   seconds
+spark.metrics.conf.*.sink.graphite.prefix spark_job_test
+spark.metrics.conf.*.source.jvm.class     org.apache.spark.metrics.source.JvmSource
+
+spark.extraListeners                      ch.cern.sparkmeasure.InfluxDBSink
+spark.sparkmeasure.influxdbURL            http://spark-influxdb.marathon.l4lb.thisdcos.directory:8086 
 

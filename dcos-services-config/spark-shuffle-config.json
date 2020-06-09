@@ -3,12 +3,9 @@
   "instances": 5,
   "mem": 1024,
   "cpus": 0.05,
-  "portDefinitions": [
-    { "port": 7337, "protocol": "tcp", "name": "shuffle-service" }
-  ],
-  "cmd": "rm -rf /tmp/spark/spark-* && rm -rf /tmp/spark/blockmgr-* && /opt/spark/sbin/start-mesos-shuffle-service.sh --conf spark.shuffle.service.enabled=true --conf spark.network.timeout=10s --conf spark.shuffle.io.connectionTimeout=10s && cd /opt/spark/logs/ && find . -name 'spark--org.apache.spark.deploy.mesos.MesosExternalShuffleService-*.out' -exec tail -f {} \\;",
+  "cmd": "rm -rf /tmp/spark/spark-* && rm -rf /tmp/spark/blockmgr-* && chmod o+w /tmp/spark && /opt/spark/sbin/start-mesos-shuffle-service.sh --conf spark.shuffle.service.enabled=true --conf spark.network.timeout=10s --conf spark.shuffle.io.connectionTimeout=10s --conf spark.metrics.conf.*.sink.graphite.class=org.apache.spark.metrics.sink.GraphiteSink --conf spark.metrics.conf.*.sink.graphite.host=spark-graphite.marathon.l4lb.thisdcos.directory --conf spark.metrics.conf.*.sink.graphite.port=2003 --conf spark.metrics.conf.*.sink.graphite.period=10 --conf spark.metrics.conf.*.sink.graphite.unit=seconds --conf spark.metrics.conf.*.sink.graphite.prefix=spark_job_test --conf spark.metrics.conf.*.source.jvm.class=org.apache.spark.metrics.source.JvmSource --conf spark.sparkmeasure.influxdbURL=http://spark-influxdb.marathon.l4lb.thisdcos.directory:8086 --conf spark.extraListeners=ch.cern.sparkmeasure.InfluxDBSink && cd /opt/spark/logs/ && find . -name 'spark--org.apache.spark.deploy.mesos.MesosExternalShuffleService-*.out' -exec tail -f {} \\;",
   "env": {
-    "SPARK_DAEMON_MEMORY": "512m"
+    "SPARK_DAEMON_MEMORY": "1024m"
   },
   "constraints": [
     [
@@ -19,29 +16,38 @@
   "labels": {
     "SPARK_VERSION": "2.4.3"
   },
+  "networks": [
+    { "mode": "container/bridge" }
+  ],
   "container": {
     "type": "DOCKER",
     "docker": {
-      "image": "mesosphere/spark:2.9.0-2.4.3-scala-2.12-hadoop-2.9",
-      "network": "HOST"
+      "image": "mesosphere/spark:2.9.0-2.4.3-scala-2.12-hadoop-2.9"
     },
+    "portMappings": [
+      { "hostPort": 7337, "containerPort": 7337, "servicePort": 7337, "protocol": "tcp", "name": "shuffle-service" }
+    ],
     "volumes": [
       {
         "containerPath": "/tmp/spark",
         "hostPath": "/var/lib/tmp/spark",
+        "mode": "RW"
+      },
+      {
+        "containerPath": "/opt/spark/logs",
+        "hostPath": "/var/log/spark",
         "mode": "RW"
       }
     ]
   },
   "healthChecks": [
     {
-      "protocol": "TCP",
-      "gracePeriodSeconds": 5,
+      "gracePeriodSeconds": 300,
       "intervalSeconds": 60,
-      "timeoutSeconds": 10,
       "maxConsecutiveFailures": 3,
-      "port": 7337,
-      "portType": "PORT_NUMBER"
+      "portIndex": 0,
+      "protocol": "TCP",
+      "timeoutSeconds": 10
     }
   ]
 }
