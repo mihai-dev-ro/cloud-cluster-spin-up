@@ -11,5 +11,5 @@ dcos spark run --submit-args="\
 --properties-file=$SPARK_JOB_PROPS/job.props \
 --class com.github.ehiggs.spark.terasort.TeraGen \
 https://github.com/mihai-dev-ro/spark-terasort/raw/master/spark-terasort-1.1-SNAPSHOT.jar \
-5G hdfs://hdfs/spark-job/terasort/data/input"
+1G hdfs://hdfs/spark-job/terasort/data/input"
 

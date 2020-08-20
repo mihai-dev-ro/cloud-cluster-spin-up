@@ -5,7 +5,7 @@
   "service": {
     "UCR_containerizer": true,
     "cpus": 1,
-    "docker-image": "mesosphere/spark:2.9.0-2.4.3-scala-2.12-hadoop-2.9",
+    "docker-image": "mesosphere/spark:2.11.0-2.4.6-scala-2.11-hadoop-2.9",
     "log-level": "DEBUG",
     "mem": 1024
   }

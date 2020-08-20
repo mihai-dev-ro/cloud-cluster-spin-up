@@ -1,0 +1,43 @@
+{
+  "id": "/kyme-scheduling",
+  "instances": 1,
+  "cpus": 1,
+  "mem": 2048,
+  "networks": [
+    {
+      "mode": "container/bridge"
+    }
+  ],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "mihainicola/kyme-scheduling-service:0.0.1-SNAPSHOT",
+      "forcePullImage": true
+    },
+    "portMappings": [
+      { "hostPort": 0, "containerPort": 7900, "servicePort": 7900, "protocol": "tcp", "name": "kyme", "labels": { "VIP_0": "/kyme:7900" } }
+    ]
+  },
+  "labels": {
+    "HAPROXY_GROUP":"external"
+  },
+  "healthChecks": [
+    {
+      "protocol": "MESOS_HTTP",
+      "path": "/alive",
+      "portIndex": 0,
+      "gracePeriodSeconds": 60,
+      "intervalSeconds": 20,
+      "timeoutSeconds": 10,
+      "maxConsecutiveFailures": 3
+    }
+  ],
+  "upgradeStrategy": {
+    "minimumHealthCapacity": 0,
+    "maximumOverCapacity": 0
+  },
+  "unreachableStrategy": {
+    "expungeAfterSeconds": 0,
+    "inactiveAfterSeconds": 0
+  }
+}

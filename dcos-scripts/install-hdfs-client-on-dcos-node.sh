@@ -59,3 +59,5 @@ hdfs dfs -mkdir /history
 hdfs dfs -chmod 666 /history
 hdfs dfs -mkdir -p /spark-job/terasort/data
 hdfs dfs -chmod 666 /spark-job
+hdfs dfs -mkdir -p /spark-job/grep/data
+hdfs dfs -mkdir -p /spark-job/grep/results

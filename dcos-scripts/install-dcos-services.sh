@@ -30,3 +30,9 @@ dcos package install --yes --options="$DCOS_CONFIG_DIR/marathon-lb-config.json" 
 
 # install spark-monitoring
 dcos marathon app add "$DCOS_CONFIG_DIR/spark-monitoring-config.json"
+
+# install livy-service
+dcos marathon app add "$DCOS_CONFIG_DIR/apache-livy-service-config.json"
+
+# install kyme-service
+dcos marathon app add "$DCOS_CONFIG_DIR/kyme-scheduling-service-config.json"

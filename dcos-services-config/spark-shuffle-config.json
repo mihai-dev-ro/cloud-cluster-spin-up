@@ -14,7 +14,7 @@
     ]
   ],
   "labels": {
-    "SPARK_VERSION": "2.4.3"
+    "SPARK_VERSION": "2.4.6"
   },
   "networks": [
     { "mode": "container/bridge" }
@@ -22,7 +22,7 @@
   "container": {
     "type": "DOCKER",
     "docker": {
-      "image": "mesosphere/spark:2.9.0-2.4.3-scala-2.12-hadoop-2.9"
+      "image": "mesosphere/spark:2.11.0-2.4.6-scala-2.11-hadoop-2.9"
     },
     "portMappings": [
       { "hostPort": 7337, "containerPort": 7337, "servicePort": 7337, "protocol": "tcp", "name": "shuffle-service" }
