@@ -5,17 +5,27 @@
   "mem": 2048,
   "networks": [
     {
-      "mode": "container/bridge"
+      "mode": "container"
     }
   ],
   "container": {
-    "type": "DOCKER",
+    "type": "MESOS",
     "docker": {
       "image": "mihainicola/apache-livy-service",
       "forcePullImage": true
     },
     "portMappings": [
-      { "hostPort": 0, "containerPort": 8998, "servicePort": 8998, "protocol": "tcp", "name": "livy", "labels": { "VIP_0": "/livy:8998" } }
+      { "hostPort": 0, "containerPort": 8998, "servicePort": 8998, "protocol": "tcp", "name": "livy", "labels": { "VIP_0": "/livy:8998" } },
+      { "hostPort": 0, "containerPort": 4040, "servicePort": 4040, "protocol": "tcp", "name": "spark-job-1", "labels": { "VIP_0": "/spark-job:4040" } },
+      { "hostPort": 0, "containerPort": 4041, "servicePort": 4041, "protocol": "tcp", "name": "spark-job-2", "labels": { "VIP_0": "/spark-job:4041" } },
+      { "hostPort": 0, "containerPort": 4042, "servicePort": 4042, "protocol": "tcp", "name": "spark-job-3", "labels": { "VIP_0": "/spark-job:4042" } },
+      { "hostPort": 0, "containerPort": 4043, "servicePort": 4043, "protocol": "tcp", "name": "spark-job-4", "labels": { "VIP_0": "/spark-job:4043" } },
+      { "hostPort": 0, "containerPort": 4044, "servicePort": 4044, "protocol": "tcp", "name": "spark-job-5", "labels": { "VIP_0": "/spark-job:4044" } },
+      { "hostPort": 0, "containerPort": 4045, "servicePort": 4045, "protocol": "tcp", "name": "spark-job-6", "labels": { "VIP_0": "/spark-job:4045" } },
+      { "hostPort": 0, "containerPort": 4046, "servicePort": 4046, "protocol": "tcp", "name": "spark-job-7", "labels": { "VIP_0": "/spark-job:4046" } },
+      { "hostPort": 0, "containerPort": 4047, "servicePort": 4047, "protocol": "tcp", "name": "spark-job-8", "labels": { "VIP_0": "/spark-job:4047" } },
+      { "hostPort": 0, "containerPort": 7001, "servicePort": 7001, "protocol": "tcp", "name": "spark-driver-1", "labels": { "VIP_0": "/livy:7001" } },
+      { "hostPort": 0, "containerPort": 7005, "servicePort": 7005, "protocol": "tcp", "name": "spark-blockmanager-1", "labels": { "VIP_0": "/livy:7005" } }
     ]
   },
   "fetch": [

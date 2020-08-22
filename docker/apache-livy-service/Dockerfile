@@ -47,7 +47,7 @@ COPY entrypoint.sh /opt/entrypoint.sh
 RUN chmod +x /opt/entrypoint.sh
 
 # expose 8998/TCP (livy)
-EXPOSE 8998/tcp
+EXPOSE 8998 4040-4050 7001-7010
 
 WORKDIR /
 CMD [ "/opt/entrypoint.sh" ]
