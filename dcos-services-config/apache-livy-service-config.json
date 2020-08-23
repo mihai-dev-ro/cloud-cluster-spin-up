@@ -43,7 +43,10 @@
     }
   ],
   "env": {
-    "LIVY_SERVER_JAVA_OPTS": "-Xms512m -Xmx512m -XX:+UseG1GC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintHeapAtGC -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -XX:+PrintPromotionFailure -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=10M -Xloggc:/mnt/mesos/sandbox/gc.log"
+    "LIVY_SERVER_JAVA_OPTS": "-Xms512m -Xmx512m -XX:+UseG1GC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintHeapAtGC -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -XX:+PrintPromotionFailure -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=10M -Xloggc:/mnt/mesos/sandbox/gc.log",
+    "JAVA_HOME":"/usr/lib/jvm/8u212b03",
+    "HADOOP_CONF_DIR":"/etc/hadoop",
+    "SPARK_HOME":"/opt/spark"
   },
   "labels": {
     "MARATHON_SINGLE_INSTANCE_APP": "true",
