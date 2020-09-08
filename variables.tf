@@ -14,7 +14,7 @@ variable nb_nodes_public_agent {
 
 variable nb_nodes_private_agent {
   type        = number
-  default     = 5
+  default     = 7
   description = "number of private agents in the cluster"
 }
 

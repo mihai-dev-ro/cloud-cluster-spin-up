@@ -2,7 +2,7 @@
   "id": "/livy",
   "instances": 1,
   "cpus": 2,
-  "mem": 2048,
+  "mem": 4092,
   "networks": [
     {
       "mode": "container"

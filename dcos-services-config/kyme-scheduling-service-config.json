@@ -2,7 +2,7 @@
   "id": "/kyme-scheduling",
   "instances": 1,
   "cpus": 1,
-  "mem": 1024,
+  "mem": 2048,
   "networks": [
     {
       "mode": "container/bridge"
